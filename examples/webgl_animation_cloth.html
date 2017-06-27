@@ -141,7 +141,7 @@
 				
 				// cloth material
 				var loader = new THREE.TextureLoader();
-				var clothTexture = loader.load( 'textures/patterns/circuit_pattern.png' );
+				var clothTexture = loader.setCrossOrigin("anonymous").load( 'textures/patterns/circuit_pattern.png' );
 				clothTexture.wrapS = clothTexture.wrapT = THREE.RepeatWrapping;
 				clothTexture.anisotropy = 16;
 				clothTexture.premultiplyAlpha = true; // important!
