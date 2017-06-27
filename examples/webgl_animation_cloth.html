@@ -140,9 +140,12 @@
 
 				// lights
 
-				var light, materials;
-
-				scene.add( new THREE.AmbientLight( 0x666666 ) );
+				var light, pointLight, materials;
++				
++				pointLight = new THREE.PointLight(0xffee77, 2, 100, 2);
++				pointLight.position.set(30,100,30);
++				pointLight.castShadow = true;
++				scene.add(pointLight);
 
 				light = new THREE.DirectionalLight( 0xdfebff, 1.75 );
 				light.position.set( 50, 200, 100 );
@@ -192,12 +195,30 @@
 				object.position.set( 0, 0, 0 );
 				object.castShadow = true;
 				scene.add( object );
-
+				
+				// depth material
 				object.customDepthMaterial = new THREE.ShaderMaterial( {
 					uniforms: uniforms,
 					vertexShader: vertexShader,
 					fragmentShader: fragmentShader,
 					side: THREE.DoubleSide
+				} );
+				
+				// distance material
+				var distanceShader = THREE.ShaderLib[ "distanceRGBA" ];
+
+				var uniforms = THREE.UniformsUtils.clone( distanceShader.uniforms );
+				uniforms.alphaMap.value = clothTexture;
+				object.customDistanceMaterial = new THREE.ShaderMaterial( {
+					defines: {
+					  'USE_SHADOWMAP': '',
+					  'USE_ALPHAMAP': '',
+					  'ALPHATEST': 0.5
+					},
+					uniforms: uniforms,
+					vertexShader: distanceShader.vertexShader,
+					fragmentShader: distanceShader.fragmentShader,
+					side: THREE.DoubleSide,
 				} );
 
 				// sphere
